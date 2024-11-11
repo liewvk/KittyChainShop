@@ -13,7 +13,8 @@ In this tutorial we will be covering:
 7.Interacting with the dapp in a browser
 
 Setting up the development environment
-There are a few technical requirements before we start. Please install the following:
+There are a few technical requirements before we start.
+Please install the following:
 
 Node.js v8+ LTS and npm (comes with Node)
 Git

@@ -1,0 +1,130 @@
+[
+  {
+    "id": 0,
+    "name": "Frieda",
+    "picture": "images/cat1.jpg",
+    "age": 3,
+    "breed": "Exotic Shorthair",
+    "location": "Kuala Lumpur"
+  },
+  {
+    "id": 1,
+    "name": "Gina",
+    "picture": "images/cat2.jpg",
+    "age": 3,
+    "breed": "Persian",
+    "location": "Petaling Jaya"
+  },
+  {
+    "id": 2,
+    "name": "Collins",
+    "picture": "images/cat3.jpg",
+    "age": 2,
+    "breed": "Ragdoll",
+    "location": "Rawang"
+  },
+  {
+    "id": 3,
+    "name": "Melissa",
+    "picture": "images/cat4.jpg",
+    "age": 2,
+    "breed": "British Shorthair",
+    "location": "Penang"
+  },
+  {
+    "id": 4,
+    "name": "Jeanine",
+    "picture": "images/cat5.jpg",
+    "age": 2,
+    "breed": "Scottish Fold",
+    "location": "Melaka"
+  },
+  {
+    "id": 5,
+    "name": "Elvia",
+    "picture": "images/cat6.jpg",
+    "age": 3,
+    "breed": "Norwegian Forest Cat",
+    "location": "Ipoh"
+  },
+  {
+    "id": 6,
+    "name": "Latisha",
+    "picture": "images/cat7.jpg",
+    "age": 3,
+    "breed": "Birman",
+    "location": "Alor Setar"
+  },
+  {
+    "id": 7,
+    "name": "Coleman",
+    "picture": "images/cat8.jpg",
+    "age": 3,
+    "breed": "Siberian",
+    "location": "Kuantan"
+  },
+  {
+    "id": 8,
+    "name": "Nichole",
+    "picture": "images/cat9.jpg",
+    "age": 2,
+    "breed": "Egyptian Mau",
+    "location": "Johor Bahru"
+  },
+  {
+    "id": 9,
+    "name": "Fran",
+    "picture": "images/cat10.jpg",
+    "age": 3,
+    "breed": "Japanese Bobtail",
+    "location": "Kota Baru"
+  },
+  {
+    "id": 10,
+    "name": "Leonor",
+    "picture": "images/cat11.jpg",
+    "age": 2,
+    "breed": "American Curl",
+    "location": "Kuching"
+  },
+  {
+    "id": 11,
+    "name": "Dean",
+    "picture": "images/cat12.jpg",
+    "age": 3,
+    "breed": "Somali",
+    "location": "Klang"
+  },
+  {
+    "id": 12,
+    "name": "Stevenson",
+    "picture": "images/cat13.jpg",
+    "age": 3,
+    "breed": "Turkish Angora",
+    "location": "Kangar"
+  },
+  {
+    "id": 13,
+    "name": "Kristina",
+    "picture": "images/cat14.jpg",
+    "age": 4,
+    "breed": "Balinese",
+    "location": "Putra Jaya"
+  },
+  {
+    "id": 14,
+    "name": "Ethel",
+    "picture": "images/cat15.jpg",
+    "age": 2,
+    "breed": "Havana Brown",
+    "location": "Muar"
+  },
+  {
+    "id": 15,
+    "name": "Terry",
+    "picture": "images/cat16.jpg",
+    "age": 2,
+    "breed": "American Bobtail",
+    "location": "Teluk Intan"
+  }
+]

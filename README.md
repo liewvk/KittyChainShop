@@ -14,10 +14,13 @@ In this tutorial we will be covering:
 
 Setting up the development environment
 There are a few technical requirements before we start.
+
 Please install the following:
 
 Node.js v8+ LTS and npm (comes with Node)
+
 Git
+
 Once we have those installed, we only need one command to install Truffle:
 
 npm install -g truffle

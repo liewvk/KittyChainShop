@@ -11,7 +11,8 @@ In this tutorial we will be covering:
 5. Testing the smart contract
 6. Creating a user interface to interact with the smart contract
 7.Interacting with the dapp in a browser
-Setting up the development environment¶
+
+Setting up the development environment
 There are a few technical requirements before we start. Please install the following:
 
 Node.js v8+ LTS and npm (comes with Node)

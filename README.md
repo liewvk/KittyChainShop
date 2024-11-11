@@ -20,5 +20,4 @@ Node.js v8+ LTS and npm (comes with Node)
 Git
 Once we have those installed, we only need one command to install Truffle:
 
-
 npm install -g truffle

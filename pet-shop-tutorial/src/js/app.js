@@ -1,112 +1,116 @@
 App = {
   web3Provider: null,
   contracts: {},
+  account: null,
 
-  init: function() {
-    // Load pets.
-    $.getJSON('../pets.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
+  init: async function () {
+    const petsData = await $.getJSON("pets.json");
 
-      for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].breed);
-        petTemplate.find('.pet-age').text(data[i].age);
-        petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+    const petsRow = $("#petsRow");
+    const petTemplate = $("#petTemplate");
 
-        petsRow.append(petTemplate.html());
-      }
+    petsData.forEach((pet) => {
+      const petCard = petTemplate.clone();
+      petCard.find(".panel-title").text(pet.name);
+      petCard.find("img").attr("src", pet.picture).addClass("pet-img");
+      petCard.find(".pet-breed").text(pet.breed);
+      petCard.find(".pet-age").text(pet.age);
+      petCard.find(".pet-location").text(pet.location);
+      petCard.find(".btn-adopt").attr("data-id", pet.id);
+      petCard.removeAttr("id").show();
+      petsRow.append(petCard);
     });
 
     return App.initWeb3();
   },
 
-  initWeb3: function() {
-// Modern dapp browsers...
+  initWeb3: async function () {
+    if (typeof window.ethereum !== 'undefined') {
+      App.web3Provider = window.ethereum;
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (!accounts || accounts.length === 0) {
+          throw new Error("No accounts found.");
+        }
+        App.account = accounts[0];
+        console.log("Connected account:", App.account);
+      } catch (error) {
+        console.error("Error getting accounts:", error);
+        return;
+      }
+      App.web3 = new Web3(App.web3Provider);
+    } else {
+      alert("No Ethereum provider detected. Please install MetaMask.");
+      return;
+    }
 
-// Legacy dapp browsers...
-if (window.web3) {
-  App.web3Provider = window.web3.currentProvider;
-}
-// If no injected web3 instance is detected, fall back to Ganache
-else {
-  App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
-}
-web3 = new Web3(App.web3Provider);
     return App.initContract();
   },
 
-  initContract: function() {
-    $.getJSON('Adoption.json', function(data) {
-      // Get the necessary contract artifact file and instantiate it with truffle-contract
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
-    
-      // Set the provider for our contract
+  initContract: async function () {
+    try {
+      const data = await $.getJSON("build/contracts/Adoption.json");
+      App.contracts.Adoption = TruffleContract(data);
       App.contracts.Adoption.setProvider(App.web3Provider);
-    
-      // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
-    });
 
-    return App.bindEvents();
+      const instance = await App.contracts.Adoption.deployed();
+      console.log("✅ Contract loaded at:", instance.address);
+
+      App.bindEvents();
+      App.markAdopted();
+    } catch (error) {
+      console.error("❌ Contract load error:", error);
+      alert("Failed to load Adoption contract. Make sure it's deployed and JSON is available.");
+    }
   },
 
-  bindEvents: function() {
-    $(document).on("click", '.btn-adopt', App.handleAdopt);
+  bindEvents: function () {
+    $(document).on("click", ".btn-adopt", App.handleAdopt);
   },
 
-  markAdopted: function(adopters, account) {
-    var adoptionInstance;
+  markAdopted: async function () {
+    try {
+      const instance = await App.contracts.Adoption.deployed();
+      const adopters = await instance.getAdopters.call();
 
-    App.contracts.Adoption.deployed().then(function(instance) {
-      adoptionInstance = instance;
-    
-      return adoptionInstance.getAdopters.call();
-    }).then(function(adopters) {
-      for (i = 0; i < adopters.length; i++) {
-        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+      for (let i = 0; i < adopters.length; i++) {
+        if (adopters[i] !== "0x0000000000000000000000000000000000000000") {
+          $(".btn-adopt[data-id='" + i + "']")
+            .text("Success")
+            .attr("disabled", true);
         }
       }
-    }).catch(function(err) {
-      console.log(err.message);
-    });
+    } catch (error) {
+      console.error("markAdopted error:", error);
+    }
   },
 
-  handleAdopt: function(event) {
+  handleAdopt: async function (event) {
     event.preventDefault();
+    const petId = parseInt($(event.target).data("id"));
 
-    var petId = parseInt($(event.target).data('id'));
+    try {
+      const instance = await App.contracts.Adoption.deployed();
+      const gas = await instance.adopt.estimateGas(petId, { from: App.account });
+      const result = await instance.adopt(petId, { from: App.account, gas });
 
-    var adoptionInstance;
-
-web3.eth.getAccounts(function(error, accounts) {
-  if (error) {
-    console.log(error);
+      console.log("Adoption successful:", result);
+      $(event.target).text("Success").attr("disabled", true);
+      App.markAdopted();
+    } catch (err) {
+      console.error("Adoption failed:", err);
+      alert("Transaction failed: " + err.message);
+    }
   }
-
-  var account = accounts[0];
-
-  App.contracts.Adoption.deployed().then(function(instance) {
-    adoptionInstance = instance;
-
-    // Execute adopt as a transaction by sending account
-    return adoptionInstance.adopt(petId, {from: account});
-  }).then(function(result) {
-    return App.markAdopted();
-  }).catch(function(err) {
-    console.log(err.message);
-  });
-});
-  }
-
 };
 
-$(function() {
-  $(window).load(function() {
+$(function () {
+  $(window).on("load", function () {
     App.init();
   });
 });
+
+$(document).on("error", ".pet-img", function () {
+  $(this).attr("src", "images/default.jpg");
+});
+
